@@ -1,0 +1,221 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: 增值税发票识别
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        sourceType: llm
+        targetType: answer
+      id: llm-answer
+      selected: false
+      source: llm
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: document-extractor
+      id: 1730728405345-source-1730728879013-target
+      source: '1730728405345'
+      sourceHandle: source
+      target: '1730728879013'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 1730728879013-source-llm-target
+      source: '1730728879013'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - image
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: file
+          max_length: 48
+          options: []
+          required: true
+          type: file
+          variable: file
+      height: 90
+      id: '1730728405345'
+      position:
+        x: -499.5143009335236
+        y: -98.28174252021626
+      positionAbsolute:
+        x: -499.5143009335236
+        y: -98.28174252021626
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1730728405345'
+          - file
+        desc: ''
+        memory:
+          query_prompt_template: '{{#sys.query#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 10
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: qwen2.5:7b
+          provider: ollama
+        prompt_template:
+        - id: 7d589040-b1dc-4f86-930e-bd29209fb0d2
+          role: system
+          text: 请提取这张照片的内容，其中内容格式‘机器编号’、‘发票代码’、‘发票号码’、‘开票日期’、‘校 验 码’、‘购买方名称’、‘购买方纳税人识别号’、‘购买方地
+            址、电 话’、‘开户行及账号’、‘货物或应税劳务、服务名称’、‘规格型号’、‘单 位’、‘数 量’、‘单 价’、‘金 额’、‘税率’、‘税
+            额’、‘价税合计（大写）’、‘价税合计（小写）’、‘销售方名称’、‘销售方纳税人识别号’、‘销售方地 址、电 话’、‘销售方地 址、电 话’、‘开户行及账号’、‘备注’、‘收款人’、‘复核’、‘开票人’
+            字段返回信息，返回的结果信息以json格式返回
+        selected: false
+        title: LLM
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+            variable_selector:
+            - sys
+            - files
+          enabled: false
+      height: 98
+      id: llm
+      position:
+        x: 357.37956696112315
+        y: -6.95956389182308
+      positionAbsolute:
+        x: 357.37956696112315
+        y: -6.95956389182308
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#llm.text#}}
+
+          {{#1730728405345.file#}}'
+        desc: ''
+        selected: false
+        title: 直接回复
+        type: answer
+        variables: []
+      height: 103
+      id: answer
+      position:
+        x: 323.7439337282958
+        y: 261.3806778363643
+      positionAbsolute:
+        x: 323.7439337282958
+        y: 261.3806778363643
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        is_array_file: true
+        selected: false
+        title: 文档提取器
+        type: document-extractor
+        variable_selector:
+        - sys
+        - files
+      height: 92
+      id: '1730728879013'
+      position:
+        x: -75.33273796707073
+        y: -75.69063777060849
+      positionAbsolute:
+        x: -75.33273796707073
+        y: -75.69063777060849
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 433.0656482593122
+      y: 194.8926949817752
+      zoom: 0.8729675911337631
